@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>UPSC Sankalp 2027 — Polity Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #181820;
+    --surface3: #1e1e28;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #f0effe;
+    --text2: #9896b8;
+    --text3: #6461a0;
+    --accent: #7c6ef7;
+    --accent2: #a99bf9;
+    --accent-glow: rgba(124,110,247,0.15);
+    --gold: #f5c842;
+    --gold-dim: rgba(245,200,66,0.12);
+    --green: #4ecb83;
+    --green-dim: rgba(78,203,131,0.12);
+    --red: #ff6b6b;
+    --red-dim: rgba(255,107,107,0.1);
+    --amber: #ffa94d;
+    --amber-dim: rgba(255,169,77,0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  /* GRID BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(124,110,247,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,110,247,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  /* GLOW ORB */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 400px;
+    background: radial-gradient(ellipse at center, rgba(124,110,247,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .app { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* ── HEADER ── */
+  header {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 36px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .header-title { font-family: 'Syne', sans-serif; }
+  .header-title .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .header-title h1 {
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--text) 40%, var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header-title .sub { font-size: 13px; color: var(--text2); margin-top: 6px; font-family: 'DM Sans', sans-serif; }
+  .header-date { font-size: 12px; color: var(--text3); text-align: right; }
+  .header-date span { display: block; font-size: 20px; font-family: 'Syne',sans-serif; font-weight: 700; color: var(--text2); }
+
+  /* ── STATS ROW ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 16px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .stat-card:hover { border-color: var(--border2); }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 2px 2px 0 0;
+  }
+  .stat-card.purple::before { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .stat-card.green::before { background: var(--green); }
+  .stat-card.amber::before { background: var(--amber); }
+  .stat-card.gold::before { background: var(--gold); }
+  .stat-card .stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .stat-card .stat-val { font-family: 'Syne',sans-serif; font-size: 28px; font-weight: 800; }
+  .stat-card .stat-sub { font-size: 11px; color: var(--text2); margin-top: 4px; }
+  .stat-card.purple .stat-val { color: var(--accent2); }
+  .stat-card.green .stat-val { color: var(--green); }
+  .stat-card.amber .stat-val { color: var(--amber); }
+  .stat-card.gold .stat-val { color: var(--gold); }
+
+  /* ── PROGRESS BAR ── */
+  .progress-section { margin-bottom: 32px; }
+  .section-title {
+    font-family: 'Syne',sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .progress-bar-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+  .progress-label { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 13px; }
+  .progress-label strong { color: var(--text); }
+  .progress-label span { color: var(--text2); }
+  .bar-track {
+    background: var(--surface3);
+    border-radius: 999px;
+    height: 8px;
+    overflow: hidden;
+    margin-bottom: 6px;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%);
+    transition: width 1s cubic-bezier(.16,1,.3,1);
+    position: relative;
+  }
+  .bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 6px var(--accent);
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 4px;
+    flex-wrap: wrap;
+  }
+  .tab {
+    flex: 1;
+    min-width: 80px;
+    padding: 8px 14px;
+    border: none;
+    background: transparent;
+    color: var(--text2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 7px;
+    transition: all 0.15s;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--text); background: var(--surface2); }
+  .tab.active { background: var(--accent); color: white; font-weight: 600; }
+
+  /* ── TABLE ── */
+  .table-wrapper {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .table-controls {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .search-box {
+    flex: 1;
+    min-width: 180px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 8px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-box::placeholder { color: var(--text3); }
+  .search-box:focus { border-color: var(--accent); }
+  .filter-btn {
+    padding: 7px 14px;
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text2);
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+    font-weight: 500;
+  }
+  .filter-btn:hover, .filter-btn.active { background: var(--accent-glow); border-color: var(--accent); color: var(--accent2); }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { background: var(--surface2); border-bottom: 1px solid var(--border); }
+  th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text3);
+    white-space: nowrap;
+  }
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+    cursor: pointer;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(124,110,247,0.04); }
+  td { padding: 11px 16px; font-size: 13px; }
+  .lec-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--text3);
+    min-width: 32px;
+  }
+  .topic-name { color: var(--text); font-weight: 500; }
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .status-done { background: var(--green-dim); color: var(--green); }
+  .status-pending { background: var(--amber-dim); color: var(--amber); }
+  /* checkboxes */
+  .check-grid { display: flex; gap: 4px; }
+  .check-cell {
+    width: 22px; height: 22px;
+    border-radius: 5px;
+    border: 1px solid var(--border2);
+    background: var(--surface3);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .check-cell:hover { border-color: var(--accent); }
+  .check-cell.checked { background: var(--accent); border-color: var(--accent); color: white; }
+  .check-cell.checked-gold { background: var(--gold-dim); border-color: var(--gold); color: var(--gold); }
+  .check-cell.checked-green { background: var(--green-dim); border-color: var(--green); color: var(--green); }
+
+  /* ── DAILY SCHEDULE ── */
+  .schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+  }
+  .day-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    transition: all 0.2s;
+  }
+  .day-card:hover { border-color: var(--border2); transform: translateY(-1px); }
+  .day-card.today { border-color: var(--accent); background: var(--accent-glow); }
+  .day-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  .day-card.today .day-name { color: var(--accent2); }
+  .day-task { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+  /* ── PRIORITY TOPICS ── */
+  .priority-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 640px) { .priority-grid { grid-template-columns: 1fr; } }
+  .priority-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+  .priority-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .prelims-tag {
+    background: rgba(78,203,131,0.1);
+    color: var(--green);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+  }
+  .mains-tag {
+    background: rgba(124,110,247,0.15);
+    color: var(--accent2);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+  }
+  .topic-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 12px;
+    color: var(--text2);
+    margin: 3px 3px 3px 0;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .topic-chip:hover { border-color: var(--border2); color: var(--text); }
+  .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .dot-green { background: var(--green); }
+  .dot-accent { background: var(--accent); }
+
+  /* ── WEAK LOG & TEST TRACKER ── */
+  .log-table { width: 100%; border-collapse: collapse; }
+  .log-table th {
+    padding: 10px 14px;
+    background: var(--surface2);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text3);
+    font-weight: 600;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .log-table td {
+    padding: 10px 14px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .log-table tr:last-child td { border-bottom: none; }
+  .editable {
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    width: 100%;
+    outline: none;
+    padding: 0;
+  }
+  .editable:focus { color: var(--text); }
+  .editable::placeholder { color: var(--text3); }
+  .add-row-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    background: transparent;
+    border: none;
+    color: var(--text3);
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: color 0.15s;
+    width: 100%;
+    text-align: left;
+  }
+  .add-row-btn:hover { color: var(--accent2); }
+
+  /* ── FINAL CHECKLIST ── */
+  .checklist { list-style: none; }
+  .checklist li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text2);
+    cursor: pointer;
+    transition: color 0.15s;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li:hover { color: var(--text); }
+  .checklist li.done { color: var(--text3); text-decoration: line-through; }
+  .cl-check {
+    width: 20px; height: 20px;
+    border: 1.5px solid var(--border2);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .checklist li.done .cl-check { background: var(--green); border-color: var(--green); color: white; }
+
+  /* ── SCORE INPUT ── */
+  .score-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .score-high { background: var(--green-dim); color: var(--green); }
+  .score-mid { background: var(--amber-dim); color: var(--amber); }
+  .score-low { background: var(--red-dim); color: var(--red); }
+
+  /* ── OVERVIEW RINGS ── */
+  .rings-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .ring-item { text-align: center; }
+  .ring-item svg { display: block; margin: 0 auto 4px; }
+  .ring-item .ring-label { font-size: 11px; color: var(--text2); }
+  .ring-item .ring-val { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--text); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    header { flex-direction: column; align-items: flex-start; }
+    .header-date { text-align: left; }
+    th:nth-child(n+5), td:nth-child(n+5) { display: none; }
+  }
+  @media (max-width: 520px) {
+    .header-title h1 { font-size: 26px; }
+    th:nth-child(n+4), td:nth-child(n+4) { display: none; }
+  }
+
+  /* SECTION CONTENT */
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--surface3);
+    border: 1px solid var(--border2);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 13px;
+    color: var(--text);
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.3s;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* EXPORT BTN */
+  .export-btn {
+    padding: 8px 18px;
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    letter-spacing: 0.03em;
+  }
+  .export-btn:hover { opacity: 0.85; }
+
+  .gap-section { height: 28px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-title">
+      <div class="eyebrow">Sankalp 2027</div>
+      <h1>Polity Revision<br>Dashboard</h1>
+      <div class="sub">Indian Polity · UPSC CSE · 56 Lectures</div>
+    </div>
+    <div class="header-date" id="header-date">
+      <span id="today-date"></span>
+      <div id="today-day"></div>
+    </div>
+  </header>
+
+  <!-- STATS -->
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat-card purple">
+      <div class="stat-label">Total Lectures</div>
+      <div class="stat-val">56</div>
+      <div class="stat-sub">Complete course</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-label">Completed</div>
+      <div class="stat-val" id="stat-done">38</div>
+      <div class="stat-sub">Lectures watched</div>
+    </div>
+    <div class="stat-card amber">
+      <div class="stat-label">Pending</div>
+      <div class="stat-val" id="stat-pending">18</div>
+      <div class="stat-sub">Lectures left</div>
+    </div>
+    <div class="stat-card gold">
+      <div class="stat-label">Revised ✓</div>
+      <div class="stat-val" id="stat-revised">0</div>
+      <div class="stat-sub">R1 done</div>
+    </div>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-section">
+    <div class="progress-bar-wrap">
+      <div class="progress-label">
+        <strong>Lecture Progress</strong>
+        <span id="progress-pct">68%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" id="main-bar" style="width:0%"></div></div>
+      <div style="font-size:11px; color:var(--text3); margin-top:6px;">38 of 56 lectures completed</div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('tracker')">📋 Tracker</button>
+    <button class="tab" onclick="switchTab('schedule')">📅 Schedule</button>
+    <button class="tab" onclick="switchTab('priority')">⭐ Priority</button>
+    <button class="tab" onclick="switchTab('weaklog')">🔴 Weak Log</button>
+    <button class="tab" onclick="switchTab('tests')">📊 Tests</button>
+    <button class="tab" onclick="switchTab('checklist')">✅ Final Check</button>
+  </div>
+
+  <!-- TAB: TRACKER -->
+  <div class="tab-content active" id="tab-tracker">
+    <div class="table-wrapper">
+      <div class="table-controls">
+        <input class="search-box" type="text" placeholder="Search topics..." id="search-input" oninput="filterTable()"/>
+        <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+        <button class="filter-btn" onclick="setFilter('done',this)">✅ Done</button>
+        <button class="filter-btn" onclick="setFilter('pending',this)">⏳ Pending</button>
+        <button class="export-btn" onclick="exportProgress()">Export</button>
+      </div>
+      <div style="overflow-x:auto">
+        <table id="main-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Topic</th>
+              <th>Status</th>
+              <th>R1</th>
+              <th>R2</th>
+              <th>R3</th>
+              <th>Notes</th>
+              <th>PYQ</th>
+              <th>Test</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: SCHEDULE -->
+  <div class="tab-content" id="tab-schedule">
+    <div class="section-title">Weekly Targets</div>
+    <div class="schedule-grid" id="schedule-grid"></div>
+  </div>
+
+  <!-- TAB: PRIORITY -->
+  <div class="tab-content" id="tab-priority">
+    <div class="priority-grid">
+      <div class="priority-card">
+        <h3>Must Master <span class="prelims-tag">Prelims</span></h3>
+        <div id="prelims-chips"></div>
+      </div>
+      <div class="priority-card">
+        <h3>Must Master <span class="mains-tag">Mains</span></h3>
+        <div id="mains-chips"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: WEAK LOG -->
+  <div class="tab-content" id="tab-weaklog">
+    <div class="table-wrapper">
+      <table class="log-table" id="weak-table">
+        <thead>
+          <tr><th>Topic</th><th>Problem</th><th>Action Plan</th></tr>
+        </thead>
+        <tbody id="weak-body"></tbody>
+      </table>
+      <button class="add-row-btn" onclick="addWeakRow()">+ Add Entry</button>
+    </div>
+  </div>
+
+  <!-- TAB: TESTS -->
+  <div class="tab-content" id="tab-tests">
+    <div class="table-wrapper">
+      <table class="log-table" id="test-table">
+        <thead>
+          <tr><th>Test Name</th><th>Score</th><th>Weak Topic</th><th>Improvement</th></tr>
+        </thead>
+        <tbody id="test-body"></tbody>
+      </table>
+      <button class="add-row-btn" onclick="addTestRow()">+ Add Test</button>
+    </div>
+  </div>
+
+  <!-- TAB: CHECKLIST -->
+  <div class="tab-content" id="tab-checklist">
+    <div class="table-wrapper" style="padding:4px 0">
+      <ul class="checklist" id="final-checklist"></ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const LECTURES = [
+  [1,"Constitutional History / Intro","done"],
+  [2,"Constitutional Development","done"],
+  [3,"Making of Constitution","done"],
+  [4,"Salient Features","done"],
+  [5,"Preamble","done"],
+  [6,"Union & Territory","done"],
+  [7,"Citizenship","done"],
+  [8,"Fundamental Rights Part 1","done"],
+  [9,"Fundamental Rights Part 2","done"],
+  [10,"Fundamental Rights Part 3","done"],
+  [11,"Fundamental Rights Part 4","done"],
+  [12,"Fundamental Rights Part 5","done"],
+  [13,"Fundamental Rights Part 6","done"],
+  [14,"Fundamental Rights Part 7","done"],
+  [15,"Fundamental Rights Part 8","done"],
+  [16,"Fundamental Rights Part 9","done"],
+  [17,"Fundamental Rights Part 10","done"],
+  [18,"Fundamental Rights Part 11","done"],
+  [19,"Fundamental Rights Part 12","done"],
+  [20,"Fundamental Rights Part 13","done"],
+  [21,"Fundamental Rights Part 14","done"],
+  [22,"DPSP","done"],
+  [23,"Fundamental Duties","done"],
+  [24,"President","done"],
+  [25,"President & Council of Ministers","done"],
+  [26,"PM & Council of Ministers","done"],
+  [27,"Parliamentary System","done"],
+  [28,"Parliament Part 1","done"],
+  [29,"Parliament Part 2","done"],
+  [30,"Parliament Part 3","done"],
+  [31,"Parliament Part 4","done"],
+  [32,"Parliament Part 5","done"],
+  [33,"Parliament Part 6","done"],
+  [34,"Parliament Part 7","done"],
+  [35,"Parliament Part 8","done"],
+  [36,"Parliament Part 9","done"],
+  [37,"Parliament Part 10","done"],
+  [38,"Parliament Part 11","done"],
+  [39,"Judiciary Part 1","pending"],
+  [40,"Judiciary Part 2","pending"],
+  [41,"Judiciary Part 3","pending"],
+  [42,"ADR & Governor","pending"],
+  [43,"Governor & Elections","pending"],
+  [44,"Elections Part 1","pending"],
+  [45,"Elections Part 2","pending"],
+  [46,"Emergency Provisions","pending"],
+  [47,"American Constitution","pending"],
+  [48,"British Constitution","pending"],
+  [49,"Constitutional Morality & AG","pending"],
+  [50,"Historical Underpinnings","pending"],
+  [51,"73rd Amendment","pending"],
+  [52,"74th Amendment","pending"],
+  [53,"Centre-State Financial Relations","pending"],
+  [54,"Administrative Tribunals","pending"],
+  [55,"Citizenship Revision","pending"],
+  [56,"Full Polity Revision","pending"]
+];
+
+const SCHEDULE = [
+  ["Monday","2 Lectures + PYQ practice"],
+  ["Tuesday","Parliament Revision"],
+  ["Wednesday","Fundamental Rights Revision"],
+  ["Thursday","Executive + Judiciary"],
+  ["Friday","Current Affairs Integration"],
+  ["Saturday","Mini Test + Weak Areas"],
+  ["Sunday","Full Weekly Revision"]
+];
+
+const PRELIMS = ["Fundamental Rights","DPSP vs Fundamental Rights","Parliament Procedures","Constitutional Amendments","Emergency Provisions","President vs Governor","Judiciary & Judicial Review","Election Commission","Constitutional Bodies","Schedules of Constitution"];
+const MAINS = ["Constitutional Morality","Cooperative Federalism","Centre-State Relations","Local Governance (73rd & 74th CAA)","Parliamentary Accountability","Judicial Activism vs Overreach","Election Reforms","Governor Controversy"];
+
+const CHECKLIST_ITEMS = [
+  "All lectures completed",
+  "All notes revised 3 times",
+  "PYQs completed",
+  "Topic tests completed",
+  "Full length tests completed",
+  "Short notes ready",
+  "Constitutional articles revised",
+  "Important committees revised",
+  "Landmark judgments revised"
+];
+
+const CHECKS = ["R1","R2","R3","N","P","T"];
+const CHECK_CLASSES = ["checked","checked","checked","checked-gold","checked-gold","checked-green"];
+const CHECK_LABELS = ["✓","✓","✓","✓","✓","✓"];
+
+// STATE
+let state = {};
+let weakRows = [{topic:"",problem:"",action:""}];
+let testRows = [{name:"",score:"",weak:"",improve:""}];
+let checklistState = {};
+let currentFilter = "all";
+
+function loadState() {
+  try {
+    const s = localStorage.getItem("upsc_polity_state");
+    if (s) state = JSON.parse(s);
+    const wr = localStorage.getItem("upsc_weak_rows");
+    if (wr) weakRows = JSON.parse(wr);
+    const tr = localStorage.getItem("upsc_test_rows");
+    if (tr) testRows = JSON.parse(tr);
+    const cl = localStorage.getItem("upsc_checklist");
+    if (cl) checklistState = JSON.parse(cl);
+  } catch(e) {}
+}
+function saveState() {
+  localStorage.setItem("upsc_polity_state", JSON.stringify(state));
+  localStorage.setItem("upsc_weak_rows", JSON.stringify(weakRows));
+  localStorage.setItem("upsc_test_rows", JSON.stringify(testRows));
+  localStorage.setItem("upsc_checklist", JSON.stringify(checklistState));
+}
+
+function toggleCheck(lecNo, colIdx) {
+  const key = lecNo + "_" + colIdx;
+  state[key] = !state[key];
+  saveState();
+  renderTable();
+  updateStats();
+  showToast(state[key] ? "Marked ✓" : "Unmarked");
+}
+
+function updateStats() {
+  let r1Count = 0;
+  LECTURES.forEach(([n]) => { if (state[n+"_0"]) r1Count++; });
+  document.getElementById("stat-revised").textContent = r1Count;
+  const pct = Math.round(38/56*100);
+  document.getElementById("progress-pct").textContent = pct + "%";
+  setTimeout(() => {
+    document.getElementById("main-bar").style.width = pct + "%";
+  }, 200);
+}
+
+function renderTable() {
+  const query = (document.getElementById("search-input")||{value:""}).value.toLowerCase();
+  const tbody = document.getElementById("table-body");
+  tbody.innerHTML = "";
+  LECTURES.forEach(([num, topic, status]) => {
+    const matchQuery = topic.toLowerCase().includes(query);
+    const matchFilter = currentFilter === "all" || currentFilter === status;
+    if (!matchQuery || !matchFilter) return;
+    const tr = document.createElement("tr");
+    let cells = `<td class="lec-num">${num}</td>`;
+    cells += `<td class="topic-name">${topic}</td>`;
+    const statusLabel = status === "done"
+      ? `<span class="status-badge status-done">✅ Done</span>`
+      : `<span class="status-badge status-pending">⏳ Pending</span>`;
+    cells += `<td>${statusLabel}</td>`;
+    // 6 checkboxes
+    cells += `<td><div class="check-grid">`;
+    for (let i = 0; i < 6; i++) {
+      const key = num + "_" + i;
+      const checked = !!state[key];
+      cells += `<div class="check-cell ${checked ? CHECK_CLASSES[i] : ''}" onclick="toggleCheck(${num},${i})" title="${["R1","R2","R3","Notes","PYQ","Test"][i]}">${checked ? CHECK_LABELS[i] : ''}</div>`;
+    }
+    cells += `</div></td>`;
+    // fill remaining empty tds for hidden cols
+    for (let j = 0; j < 4; j++) cells += `<td></td>`;
+    tr.innerHTML = cells;
+    tbody.appendChild(tr);
+  });
+}
+
+function filterTable() { renderTable(); }
+function setFilter(f, el) {
+  currentFilter = f;
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  el.classList.add("active");
+  renderTable();
+}
+
+function renderSchedule() {
+  const todayName = new Date().toLocaleDateString("en-IN",{weekday:"long"});
+  const grid = document.getElementById("schedule-grid");
+  grid.innerHTML = "";
+  SCHEDULE.forEach(([day, task]) => {
+    const isToday = day.toLowerCase() === todayName.toLowerCase();
+    grid.innerHTML += `
+      <div class="day-card ${isToday ? 'today' : ''}">
+        <div class="day-name">${isToday ? '▶ ' : ''}${day}</div>
+        <div class="day-task">${task}</div>
+        ${isToday ? '<div style="margin-top:8px;font-size:11px;color:var(--accent2);font-weight:600;">TODAY</div>' : ''}
+      </div>`;
+  });
+}
+
+function renderPriority() {
+  const pc = document.getElementById("prelims-chips");
+  const mc = document.getElementById("mains-chips");
+  pc.innerHTML = PRELIMS.map(t => `<span class="topic-chip"><span class="dot dot-green"></span>${t}</span>`).join("");
+  mc.innerHTML = MAINS.map(t => `<span class="topic-chip"><span class="dot dot-accent"></span>${t}</span>`).join("");
+}
+
+function renderWeakLog() {
+  const tbody = document.getElementById("weak-body");
+  tbody.innerHTML = "";
+  weakRows.forEach((row, i) => {
+    tbody.innerHTML += `<tr>
+      <td><input class="editable" placeholder="Topic..." value="${row.topic}" oninput="weakRows[${i}].topic=this.value;saveState()"/></td>
+      <td><input class="editable" placeholder="Problem..." value="${row.problem}" oninput="weakRows[${i}].problem=this.value;saveState()"/></td>
+      <td><input class="editable" placeholder="Action plan..." value="${row.action}" oninput="weakRows[${i}].action=this.value;saveState()"/></td>
+    </tr>`;
+  });
+}
+function addWeakRow() {
+  weakRows.push({topic:"",problem:"",action:""});
+  renderWeakLog();
+}
+
+function renderTestLog() {
+  const tbody = document.getElementById("test-body");
+  tbody.innerHTML = "";
+  testRows.forEach((row, i) => {
+    let scoreBadge = "";
+    const sc = parseInt(row.score);
+    if (!isNaN(sc) && row.score !== "") {
+      const cls = sc >= 70 ? "score-high" : sc >= 50 ? "score-mid" : "score-low";
+      scoreBadge = `<span class="score-badge ${cls}">${sc}%</span>`;
+    }
+    tbody.innerHTML += `<tr>
+      <td><input class="editable" placeholder="Test name..." value="${row.name}" oninput="testRows[${i}].name=this.value;saveState()"/></td>
+      <td><input class="editable" placeholder="e.g. 72" value="${row.score}" oninput="testRows[${i}].score=this.value;renderTestLog();saveState()" style="width:60px"/>
+        ${scoreBadge}</td>
+      <td><input class="editable" placeholder="Weak topic..." value="${row.weak}" oninput="testRows[${i}].weak=this.value;saveState()"/></td>
+      <td><input class="editable" placeholder="Improvement..." value="${row.improve}" oninput="testRows[${i}].improve=this.value;saveState()"/></td>
+    </tr>`;
+  });
+}
+function addTestRow() {
+  testRows.push({name:"",score:"",weak:"",improve:""});
+  renderTestLog();
+}
+
+function renderChecklist() {
+  const ul = document.getElementById("final-checklist");
+  ul.innerHTML = "";
+  CHECKLIST_ITEMS.forEach((item, i) => {
+    const done = !!checklistState[i];
+    ul.innerHTML += `<li class="${done ? 'done' : ''}" onclick="toggleChecklist(${i})">
+      <span class="cl-check">${done ? '✓' : ''}</span>
+      ${item}
+    </li>`;
+  });
+}
+function toggleChecklist(i) {
+  checklistState[i] = !checklistState[i];
+  saveState();
+  renderChecklist();
+}
+
+function switchTab(id) {
+  document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.getElementById("tab-"+id).classList.add("active");
+  event.currentTarget.classList.add("active");
+}
+
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 1800);
+}
+
+function setDate() {
+  const d = new Date();
+  const dateStr = d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+  const dayStr = d.toLocaleDateString("en-IN",{weekday:"long"});
+  document.getElementById("today-date").textContent = dateStr;
+  document.getElementById("today-day").textContent = dayStr;
+}
+
+function exportProgress() {
+  let csv = "Lec,Topic,Status,R1,R2,R3,Notes,PYQ,Test\n";
+  LECTURES.forEach(([n,t,s]) => {
+    const cols = [n,'"'+t+'"',s];
+    for (let i = 0; i < 6; i++) cols.push(state[n+"_"+i] ? "✓" : "");
+    csv += cols.join(",") + "\n";
+  });
+  const blob = new Blob([csv], {type:"text/csv"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "polity_progress.csv"; a.click();
+  showToast("Exported!");
+}
+
+// INIT
+loadState();
+setDate();
+renderTable();
+renderSchedule();
+renderPriority();
+renderWeakLog();
+renderTestLog();
+renderChecklist();
+updateStats();
+</script>
+</body>
+</html>
