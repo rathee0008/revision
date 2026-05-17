@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>UPSC Sankalp 2027 — Polity Tracker</title>
+<title>Cardio Session Tracker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -29,6 +29,8 @@
     --red-dim: rgba(255,107,107,0.1);
     --amber: #ffa94d;
     --amber-dim: rgba(255,169,77,0.12);
+    --blue: #45b7ff;
+    --blue-dim: rgba(69,183,255,0.12);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -39,7 +41,6 @@
     line-height: 1.6;
     min-height: 100vh;
   }
-  /* GRID BACKGROUND */
   body::before {
     content: '';
     position: fixed;
@@ -51,7 +52,6 @@
     pointer-events: none;
     z-index: 0;
   }
-  /* GLOW ORB */
   body::after {
     content: '';
     position: fixed;
@@ -66,7 +66,6 @@
   }
   .app { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 24px 80px; }
 
-  /* ── HEADER ── */
   header {
     padding: 48px 0 32px;
     border-bottom: 1px solid var(--border);
@@ -99,7 +98,6 @@
   .header-date { font-size: 12px; color: var(--text3); text-align: right; }
   .header-date span { display: block; font-size: 20px; font-family: 'Syne',sans-serif; font-weight: 700; color: var(--text2); }
 
-  /* ── STATS ROW ── */
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -127,6 +125,7 @@
   .stat-card.green::before { background: var(--green); }
   .stat-card.amber::before { background: var(--amber); }
   .stat-card.gold::before { background: var(--gold); }
+  .stat-card.blue::before { background: var(--blue); }
   .stat-card .stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
   .stat-card .stat-val { font-family: 'Syne',sans-serif; font-size: 28px; font-weight: 800; }
   .stat-card .stat-sub { font-size: 11px; color: var(--text2); margin-top: 4px; }
@@ -134,8 +133,8 @@
   .stat-card.green .stat-val { color: var(--green); }
   .stat-card.amber .stat-val { color: var(--amber); }
   .stat-card.gold .stat-val { color: var(--gold); }
+  .stat-card.blue .stat-val { color: var(--blue); }
 
-  /* ── PROGRESS BAR ── */
   .progress-section { margin-bottom: 32px; }
   .section-title {
     font-family: 'Syne',sans-serif;
@@ -181,7 +180,6 @@
     box-shadow: 0 0 6px var(--accent);
   }
 
-  /* ── TABS ── */
   .tabs {
     display: flex;
     gap: 4px;
@@ -210,7 +208,6 @@
   .tab:hover { color: var(--text); background: var(--surface2); }
   .tab.active { background: var(--accent); color: white; font-weight: 600; }
 
-  /* ── TABLE ── */
   .table-wrapper {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -273,50 +270,20 @@
   tbody tr:last-child { border-bottom: none; }
   tbody tr:hover { background: rgba(124,110,247,0.04); }
   td { padding: 11px 16px; font-size: 13px; }
-  .lec-num {
+  .session-num {
     font-family: 'Syne', sans-serif;
     font-weight: 700;
     font-size: 12px;
     color: var(--text3);
     min-width: 32px;
   }
-  .topic-name { color: var(--text); font-weight: 500; }
-  .status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px 10px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 600;
-  }
-  .status-done { background: var(--green-dim); color: var(--green); }
-  .status-pending { background: var(--amber-dim); color: var(--amber); }
-  /* checkboxes */
-  .check-grid { display: flex; gap: 4px; }
-  .check-cell {
-    width: 22px; height: 22px;
-    border-radius: 5px;
-    border: 1px solid var(--border2);
-    background: var(--surface3);
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px;
-    transition: all 0.15s;
-    flex-shrink: 0;
-    user-select: none;
-    -webkit-user-select: none;
-  }
-  .check-cell:hover { border-color: var(--accent); }
-  .check-cell.checked { background: var(--accent); border-color: var(--accent); color: white; }
-  .check-cell.checked-gold { background: var(--gold-dim); border-color: var(--gold); color: var(--gold); }
-  .check-cell.checked-green { background: var(--green-dim); border-color: var(--green); color: var(--green); }
+  .session-type { color: var(--text); font-weight: 500; }
 
-  /* ── DAILY SCHEDULE ── */
-  .schedule-grid {
+  .weekly-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
   }
   .day-card {
     background: var(--surface);
@@ -324,92 +291,14 @@
     border-radius: 10px;
     padding: 16px;
     transition: all 0.2s;
+    text-align: center;
   }
   .day-card:hover { border-color: var(--border2); transform: translateY(-1px); }
   .day-card.today { border-color: var(--accent); background: var(--accent-glow); }
-  .day-name {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 12px;
-    color: var(--text3);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 8px;
-  }
-  .day-card.today .day-name { color: var(--accent2); }
-  .day-task { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .day-label { font-size: 11px; color: var(--text3); text-transform: uppercase; margin-bottom: 8px; }
+  .day-val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; color: var(--text); margin-bottom: 4px; }
+  .day-sub { font-size: 11px; color: var(--text2); }
 
-  /* ── PRIORITY TOPICS ── */
-  .priority-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 640px) { .priority-grid { grid-template-columns: 1fr; } }
-  .priority-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 18px 20px;
-  }
-  .priority-card h3 {
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 14px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .prelims-tag {
-    background: rgba(78,203,131,0.1);
-    color: var(--green);
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 10px;
-  }
-  .mains-tag {
-    background: rgba(124,110,247,0.15);
-    color: var(--accent2);
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 10px;
-  }
-  .topic-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--surface3);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 5px 10px;
-    font-size: 12px;
-    color: var(--text2);
-    margin: 3px 3px 3px 0;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .topic-chip:hover { border-color: var(--border2); color: var(--text); }
-  .dot { width: 6px; height: 6px; border-radius: 50%; }
-  .dot-green { background: var(--green); }
-  .dot-accent { background: var(--accent); }
-
-  /* ── WEAK LOG & TEST TRACKER ── */
-  .log-table { width: 100%; border-collapse: collapse; }
-  .log-table th {
-    padding: 10px 14px;
-    background: var(--surface2);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text3);
-    font-weight: 600;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-  }
-  .log-table td {
-    padding: 10px 14px;
-    font-size: 13px;
-    border-bottom: 1px solid var(--border);
-    vertical-align: top;
-  }
-  .log-table tr:last-child td { border-bottom: none; }
   .editable {
     background: transparent;
     border: none;
@@ -422,6 +311,7 @@
   }
   .editable:focus { color: var(--text); }
   .editable::placeholder { color: var(--text3); }
+
   .add-row-btn {
     display: flex;
     align-items: center;
@@ -439,13 +329,12 @@
   }
   .add-row-btn:hover { color: var(--accent2); }
 
-  /* ── FINAL CHECKLIST ── */
   .checklist { list-style: none; }
   .checklist li {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 10px 0;
+    padding: 10px 16px;
     border-bottom: 1px solid var(--border);
     font-size: 13px;
     color: var(--text2);
@@ -468,48 +357,21 @@
   }
   .checklist li.done .cl-check { background: var(--green); border-color: var(--green); color: white; }
 
-  /* ── SCORE INPUT ── */
-  .score-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 11px;
+  .export-btn {
+    padding: 8px 18px;
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 12px;
     font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    letter-spacing: 0.03em;
   }
-  .score-high { background: var(--green-dim); color: var(--green); }
-  .score-mid { background: var(--amber-dim); color: var(--amber); }
-  .score-low { background: var(--red-dim); color: var(--red); }
+  .export-btn:hover { opacity: 0.85; }
 
-  /* ── OVERVIEW RINGS ── */
-  .rings-row {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-top: 16px;
-  }
-  .ring-item { text-align: center; }
-  .ring-item svg { display: block; margin: 0 auto 4px; }
-  .ring-item .ring-label { font-size: 11px; color: var(--text2); }
-  .ring-item .ring-val { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--text); }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 768px) {
-    header { flex-direction: column; align-items: flex-start; }
-    .header-date { text-align: left; }
-    th:nth-child(n+5), td:nth-child(n+5) { display: none; }
-  }
-  @media (max-width: 520px) {
-    .header-title h1 { font-size: 26px; }
-    th:nth-child(n+4), td:nth-child(n+4) { display: none; }
-  }
-
-  /* SECTION CONTENT */
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-
-  /* TOAST */
   .toast {
     position: fixed; bottom: 24px; right: 24px;
     background: var(--surface3);
@@ -527,21 +389,20 @@
   }
   .toast.show { opacity: 1; transform: translateY(0); }
 
-  /* EXPORT BTN */
-  .export-btn {
-    padding: 8px 18px;
-    background: var(--accent);
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-size: 12px;
-    font-weight: 600;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    transition: opacity 0.15s;
-    letter-spacing: 0.03em;
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  @media (max-width: 768px) {
+    header { flex-direction: column; align-items: flex-start; }
+    .header-date { text-align: left; }
+    .weekly-grid { grid-template-columns: repeat(4, 1fr); }
+    th:nth-child(n+6), td:nth-child(n+6) { display: none; }
   }
-  .export-btn:hover { opacity: 0.85; }
+  @media (max-width: 520px) {
+    .header-title h1 { font-size: 26px; }
+    .weekly-grid { grid-template-columns: repeat(2, 1fr); }
+    th:nth-child(n+5), td:nth-child(n+5) { display: none; }
+  }
 
   .gap-section { height: 28px; }
 </style>
@@ -549,12 +410,11 @@
 <body>
 <div class="app">
 
-  <!-- HEADER -->
   <header>
     <div class="header-title">
-      <div class="eyebrow">Sankalp 2027</div>
-      <h1>Polity Revision<br>Dashboard</h1>
-      <div class="sub">Indian Polity · UPSC CSE · 56 Lectures</div>
+      <div class="eyebrow">Fitness Tracker</div>
+      <h1>Cardio Session<br>Tracker</h1>
+      <div class="sub">Steps · Calories · Distance</div>
     </div>
     <div class="header-date" id="header-date">
       <span id="today-date"></span>
@@ -562,60 +422,56 @@
     </div>
   </header>
 
-  <!-- STATS -->
-  <div class="stats-grid" id="stats-grid">
-    <div class="stat-card purple">
-      <div class="stat-label">Total Lectures</div>
-      <div class="stat-val">56</div>
-      <div class="stat-sub">Complete course</div>
+  <div class="stats-grid">
+    <div class="stat-card blue">
+      <div class="stat-label">Total Sessions</div>
+      <div class="stat-val" id="stat-sessions">0</div>
+      <div class="stat-sub">Completed</div>
     </div>
     <div class="stat-card green">
-      <div class="stat-label">Completed</div>
-      <div class="stat-val" id="stat-done">38</div>
-      <div class="stat-sub">Lectures watched</div>
+      <div class="stat-label">Total Steps</div>
+      <div class="stat-val" id="stat-steps">0</div>
+      <div class="stat-sub">This week</div>
     </div>
     <div class="stat-card amber">
-      <div class="stat-label">Pending</div>
-      <div class="stat-val" id="stat-pending">18</div>
-      <div class="stat-sub">Lectures left</div>
+      <div class="stat-label">Calories Burned</div>
+      <div class="stat-val" id="stat-calories">0</div>
+      <div class="stat-sub">This week</div>
     </div>
     <div class="stat-card gold">
-      <div class="stat-label">Revised ✓</div>
-      <div class="stat-val" id="stat-revised">0</div>
-      <div class="stat-sub">R1 done</div>
+      <div class="stat-label">Avg Distance</div>
+      <div class="stat-val" id="stat-distance">0</div>
+      <div class="stat-sub">km per session</div>
     </div>
   </div>
 
-  <!-- PROGRESS BAR -->
   <div class="progress-section">
     <div class="progress-bar-wrap">
       <div class="progress-label">
-        <strong>Lecture Progress</strong>
-        <span id="progress-pct">68%</span>
+        <strong>Weekly Step Goal</strong>
+        <span id="progress-pct">0%</span>
       </div>
       <div class="bar-track"><div class="bar-fill" id="main-bar" style="width:0%"></div></div>
-      <div style="font-size:11px; color:var(--text3); margin-top:6px;">38 of 56 lectures completed</div>
+      <div style="font-size:11px; color:var(--text3); margin-top:6px;"><span id="steps-count">0</span> of 50,000 steps</div>
     </div>
   </div>
 
-  <!-- TABS -->
   <div class="tabs">
-    <button class="tab active" onclick="switchTab('tracker')">📋 Tracker</button>
-    <button class="tab" onclick="switchTab('schedule')">📅 Schedule</button>
-    <button class="tab" onclick="switchTab('priority')">⭐ Priority</button>
-    <button class="tab" onclick="switchTab('weaklog')">🔴 Weak Log</button>
-    <button class="tab" onclick="switchTab('tests')">📊 Tests</button>
-    <button class="tab" onclick="switchTab('checklist')">✅ Final Check</button>
+    <button class="tab active" onclick="switchTab('sessions')">📋 Sessions</button>
+    <button class="tab" onclick="switchTab('weekly')">📅 Weekly</button>
+    <button class="tab" onclick="switchTab('goals')">🎯 Goals</button>
+    <button class="tab" onclick="switchTab('records')">🏆 Records</button>
+    <button class="tab" onclick="switchTab('notes')">📝 Notes</button>
   </div>
 
-  <!-- TAB: TRACKER -->
-  <div class="tab-content active" id="tab-tracker">
+  <div class="tab-content active" id="tab-sessions">
     <div class="table-wrapper">
       <div class="table-controls">
-        <input class="search-box" type="text" placeholder="Search topics..." id="search-input" oninput="filterTable()"/>
+        <input class="search-box" type="text" placeholder="Search sessions..." id="search-input" oninput="filterTable()"/>
         <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
-        <button class="filter-btn" onclick="setFilter('done',this)">✅ Done</button>
-        <button class="filter-btn" onclick="setFilter('pending',this)">⏳ Pending</button>
+        <button class="filter-btn" onclick="setFilter('running',this)">🏃 Running</button>
+        <button class="filter-btn" onclick="setFilter('walking',this)">🚶 Walking</button>
+        <button class="filter-btn" onclick="setFilter('cycling',this)">🚴 Cycling</button>
         <button class="export-btn" onclick="exportProgress()">Export</button>
       </div>
       <div style="overflow-x:auto">
@@ -623,240 +479,174 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Topic</th>
-              <th>Status</th>
-              <th>R1</th>
-              <th>R2</th>
-              <th>R3</th>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Duration (min)</th>
+              <th>Steps</th>
+              <th>Distance (km)</th>
+              <th>Calories</th>
               <th>Notes</th>
-              <th>PYQ</th>
-              <th>Test</th>
             </tr>
           </thead>
           <tbody id="table-body"></tbody>
         </table>
       </div>
+      <button class="add-row-btn" onclick="addSession()">+ Add Session</button>
     </div>
   </div>
 
-  <!-- TAB: SCHEDULE -->
-  <div class="tab-content" id="tab-schedule">
-    <div class="section-title">Weekly Targets</div>
-    <div class="schedule-grid" id="schedule-grid"></div>
+  <div class="tab-content" id="tab-weekly">
+    <div class="section-title">This Week</div>
+    <div class="weekly-grid" id="weekly-grid"></div>
   </div>
 
-  <!-- TAB: PRIORITY -->
-  <div class="tab-content" id="tab-priority">
-    <div class="priority-grid">
-      <div class="priority-card">
-        <h3>Must Master <span class="prelims-tag">Prelims</span></h3>
-        <div id="prelims-chips"></div>
-      </div>
-      <div class="priority-card">
-        <h3>Must Master <span class="mains-tag">Mains</span></h3>
-        <div id="mains-chips"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB: WEAK LOG -->
-  <div class="tab-content" id="tab-weaklog">
-    <div class="table-wrapper">
-      <table class="log-table" id="weak-table">
-        <thead>
-          <tr><th>Topic</th><th>Problem</th><th>Action Plan</th></tr>
-        </thead>
-        <tbody id="weak-body"></tbody>
-      </table>
-      <button class="add-row-btn" onclick="addWeakRow()">+ Add Entry</button>
-    </div>
-  </div>
-
-  <!-- TAB: TESTS -->
-  <div class="tab-content" id="tab-tests">
-    <div class="table-wrapper">
-      <table class="log-table" id="test-table">
-        <thead>
-          <tr><th>Test Name</th><th>Score</th><th>Weak Topic</th><th>Improvement</th></tr>
-        </thead>
-        <tbody id="test-body"></tbody>
-      </table>
-      <button class="add-row-btn" onclick="addTestRow()">+ Add Test</button>
-    </div>
-  </div>
-
-  <!-- TAB: CHECKLIST -->
-  <div class="tab-content" id="tab-checklist">
+  <div class="tab-content" id="tab-goals">
     <div class="table-wrapper" style="padding:4px 0">
-      <ul class="checklist" id="final-checklist"></ul>
+      <ul class="checklist" id="goals-checklist"></ul>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-records">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;">
+      <div class="table-wrapper" style="padding:20px;">
+        <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:12px;text-transform:uppercase;color:var(--text3);">Longest Run</div>
+        <div style="font-size:28px;font-weight:800;color:var(--green);margin-bottom:4px;" id="record-distance">0 km</div>
+        <div style="font-size:12px;color:var(--text2);">Distance</div>
+      </div>
+      <div class="table-wrapper" style="padding:20px;">
+        <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:12px;text-transform:uppercase;color:var(--text3);">Most Calories</div>
+        <div style="font-size:28px;font-weight:800;color:var(--amber);margin-bottom:4px;" id="record-calories">0 kcal</div>
+        <div style="font-size:12px;color:var(--text2);">In one session</div>
+      </div>
+      <div class="table-wrapper" style="padding:20px;">
+        <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:12px;text-transform:uppercase;color:var(--text3);">Most Steps</div>
+        <div style="font-size:28px;font-weight:800;color:var(--blue);margin-bottom:4px;" id="record-steps">0</div>
+        <div style="font-size:12px;color:var(--text2);">In one session</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-notes">
+    <div class="table-wrapper">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr><th style="padding:12px 16px;text-align:left;background:var(--surface2);border-bottom:1px solid var(--border);font-size:11px;font-weight:600;text-transform:uppercase;color:var(--text3);">Date</th><th style="padding:12px 16px;text-align:left;background:var(--surface2);border-bottom:1px solid var(--border);font-size:11px;font-weight:600;text-transform:uppercase;color:var(--text3);">Notes</th></tr>
+        </thead>
+        <tbody id="notes-body"></tbody>
+      </table>
+      <button class="add-row-btn" onclick="addNote()">+ Add Note</button>
     </div>
   </div>
 
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-const LECTURES = [
-  [1,"Constitutional History / Intro","done"],
-  [2,"Constitutional Development","done"],
-  [3,"Making of Constitution","done"],
-  [4,"Salient Features","done"],
-  [5,"Preamble","done"],
-  [6,"Union & Territory","done"],
-  [7,"Citizenship","done"],
-  [8,"Fundamental Rights Part 1","done"],
-  [9,"Fundamental Rights Part 2","done"],
-  [10,"Fundamental Rights Part 3","done"],
-  [11,"Fundamental Rights Part 4","done"],
-  [12,"Fundamental Rights Part 5","done"],
-  [13,"Fundamental Rights Part 6","done"],
-  [14,"Fundamental Rights Part 7","done"],
-  [15,"Fundamental Rights Part 8","done"],
-  [16,"Fundamental Rights Part 9","done"],
-  [17,"Fundamental Rights Part 10","done"],
-  [18,"Fundamental Rights Part 11","done"],
-  [19,"Fundamental Rights Part 12","done"],
-  [20,"Fundamental Rights Part 13","done"],
-  [21,"Fundamental Rights Part 14","done"],
-  [22,"DPSP","done"],
-  [23,"Fundamental Duties","done"],
-  [24,"President","done"],
-  [25,"President & Council of Ministers","done"],
-  [26,"PM & Council of Ministers","done"],
-  [27,"Parliamentary System","done"],
-  [28,"Parliament Part 1","done"],
-  [29,"Parliament Part 2","done"],
-  [30,"Parliament Part 3","done"],
-  [31,"Parliament Part 4","done"],
-  [32,"Parliament Part 5","done"],
-  [33,"Parliament Part 6","done"],
-  [34,"Parliament Part 7","done"],
-  [35,"Parliament Part 8","done"],
-  [36,"Parliament Part 9","done"],
-  [37,"Parliament Part 10","done"],
-  [38,"Parliament Part 11","done"],
-  [39,"Judiciary Part 1","pending"],
-  [40,"Judiciary Part 2","pending"],
-  [41,"Judiciary Part 3","pending"],
-  [42,"ADR & Governor","pending"],
-  [43,"Governor & Elections","pending"],
-  [44,"Elections Part 1","pending"],
-  [45,"Elections Part 2","pending"],
-  [46,"Emergency Provisions","pending"],
-  [47,"American Constitution","pending"],
-  [48,"British Constitution","pending"],
-  [49,"Constitutional Morality & AG","pending"],
-  [50,"Historical Underpinnings","pending"],
-  [51,"73rd Amendment","pending"],
-  [52,"74th Amendment","pending"],
-  [53,"Centre-State Financial Relations","pending"],
-  [54,"Administrative Tribunals","pending"],
-  [55,"Citizenship Revision","pending"],
-  [56,"Full Polity Revision","pending"]
-];
+const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const WEEKLY_GOAL = 50000;
 
-const SCHEDULE = [
-  ["Monday","2 Lectures + PYQ practice"],
-  ["Tuesday","Parliament Revision"],
-  ["Wednesday","Fundamental Rights Revision"],
-  ["Thursday","Executive + Judiciary"],
-  ["Friday","Current Affairs Integration"],
-  ["Saturday","Mini Test + Weak Areas"],
-  ["Sunday","Full Weekly Revision"]
-];
-
-const PRELIMS = ["Fundamental Rights","DPSP vs Fundamental Rights","Parliament Procedures","Constitutional Amendments","Emergency Provisions","President vs Governor","Judiciary & Judicial Review","Election Commission","Constitutional Bodies","Schedules of Constitution"];
-const MAINS = ["Constitutional Morality","Cooperative Federalism","Centre-State Relations","Local Governance (73rd & 74th CAA)","Parliamentary Accountability","Judicial Activism vs Overreach","Election Reforms","Governor Controversy"];
-
-const CHECKLIST_ITEMS = [
-  "All lectures completed",
-  "All notes revised 3 times",
-  "PYQs completed",
-  "Topic tests completed",
-  "Full length tests completed",
-  "Short notes ready",
-  "Constitutional articles revised",
-  "Important committees revised",
-  "Landmark judgments revised"
-];
-
-const CHECKS = ["R1","R2","R3","N","P","T"];
-const CHECK_CLASSES = ["checked","checked","checked","checked-gold","checked-gold","checked-green"];
-const CHECK_LABELS = ["✓","✓","✓","✓","✓","✓"];
-
-// STATE
-let state = {};
-let weakRows = [{topic:"",problem:"",action:""}];
-let testRows = [{name:"",score:"",weak:"",improve:""}];
-let checklistState = {};
+let sessions = [];
+let notes = [];
+let goalState = {};
 let currentFilter = "all";
 
 function loadState() {
   try {
-    const s = localStorage.getItem("upsc_polity_state");
-    if (s) state = JSON.parse(s);
-    const wr = localStorage.getItem("upsc_weak_rows");
-    if (wr) weakRows = JSON.parse(wr);
-    const tr = localStorage.getItem("upsc_test_rows");
-    if (tr) testRows = JSON.parse(tr);
-    const cl = localStorage.getItem("upsc_checklist");
-    if (cl) checklistState = JSON.parse(cl);
+    const s = localStorage.getItem("cardio_sessions");
+    if (s) sessions = JSON.parse(s);
+    const n = localStorage.getItem("cardio_notes");
+    if (n) notes = JSON.parse(n);
+    const g = localStorage.getItem("cardio_goals");
+    if (g) goalState = JSON.parse(g);
   } catch(e) {}
 }
+
 function saveState() {
-  localStorage.setItem("upsc_polity_state", JSON.stringify(state));
-  localStorage.setItem("upsc_weak_rows", JSON.stringify(weakRows));
-  localStorage.setItem("upsc_test_rows", JSON.stringify(testRows));
-  localStorage.setItem("upsc_checklist", JSON.stringify(checklistState));
+  localStorage.setItem("cardio_sessions", JSON.stringify(sessions));
+  localStorage.setItem("cardio_notes", JSON.stringify(notes));
+  localStorage.setItem("cardio_goals", JSON.stringify(goalState));
 }
 
-function toggleCheck(lecNo, colIdx) {
-  const key = lecNo + "_" + colIdx;
-  state[key] = !state[key];
+function addSession() {
+  sessions.push({
+    date: new Date().toISOString().split('T')[0],
+    type: "running",
+    duration: 30,
+    steps: 4000,
+    distance: 5,
+    calories: 300,
+    notes: ""
+  });
   saveState();
   renderTable();
   updateStats();
-  showToast(state[key] ? "Marked ✓" : "Unmarked");
+  showToast("Session added");
+}
+
+function deleteSession(idx) {
+  sessions.splice(idx, 1);
+  saveState();
+  renderTable();
+  updateStats();
+  showToast("Session deleted");
 }
 
 function updateStats() {
-  let r1Count = 0;
-  LECTURES.forEach(([n]) => { if (state[n+"_0"]) r1Count++; });
-  document.getElementById("stat-revised").textContent = r1Count;
-  const pct = Math.round(38/56*100);
+  const weekAgo = new Date();
+  weekAgo.setDate(weekAgo.getDate() - 7);
+
+  const weekSessions = sessions.filter(s => new Date(s.date) >= weekAgo);
+  const weekSteps = weekSessions.reduce((a, s) => a + parseInt(s.steps || 0), 0);
+  const weekCalories = weekSessions.reduce((a, s) => a + parseInt(s.calories || 0), 0);
+  const avgDistance = weekSessions.length > 0
+    ? (weekSessions.reduce((a, s) => a + parseFloat(s.distance || 0), 0) / weekSessions.length).toFixed(1)
+    : 0;
+
+  document.getElementById("stat-sessions").textContent = sessions.length;
+  document.getElementById("stat-steps").textContent = weekSteps.toLocaleString();
+  document.getElementById("stat-calories").textContent = weekCalories;
+  document.getElementById("stat-distance").textContent = avgDistance;
+  document.getElementById("steps-count").textContent = weekSteps.toLocaleString();
+
+  const pct = Math.min(Math.round(weekSteps / WEEKLY_GOAL * 100), 100);
   document.getElementById("progress-pct").textContent = pct + "%";
   setTimeout(() => {
     document.getElementById("main-bar").style.width = pct + "%";
   }, 200);
+
+  const maxDist = sessions.reduce((max, s) => Math.max(max, parseFloat(s.distance || 0)), 0);
+  const maxCal = sessions.reduce((max, s) => Math.max(max, parseInt(s.calories || 0)), 0);
+  const maxSteps = sessions.reduce((max, s) => Math.max(max, parseInt(s.steps || 0)), 0);
+  document.getElementById("record-distance").textContent = maxDist + " km";
+  document.getElementById("record-calories").textContent = maxCal + " kcal";
+  document.getElementById("record-steps").textContent = maxSteps.toLocaleString();
 }
 
 function renderTable() {
-  const query = (document.getElementById("search-input")||{value:""}).value.toLowerCase();
+  const query = (document.getElementById("search-input") || {value: ""}).value.toLowerCase();
   const tbody = document.getElementById("table-body");
   tbody.innerHTML = "";
-  LECTURES.forEach(([num, topic, status]) => {
-    const matchQuery = topic.toLowerCase().includes(query);
-    const matchFilter = currentFilter === "all" || currentFilter === status;
+
+  sessions.forEach((s, i) => {
+    const matchQuery = s.type.toLowerCase().includes(query) || s.notes.toLowerCase().includes(query);
+    const matchFilter = currentFilter === "all" || currentFilter === s.type;
     if (!matchQuery || !matchFilter) return;
+
     const tr = document.createElement("tr");
-    let cells = `<td class="lec-num">${num}</td>`;
-    cells += `<td class="topic-name">${topic}</td>`;
-    const statusLabel = status === "done"
-      ? `<span class="status-badge status-done">✅ Done</span>`
-      : `<span class="status-badge status-pending">⏳ Pending</span>`;
-    cells += `<td>${statusLabel}</td>`;
-    // 6 checkboxes
-    cells += `<td><div class="check-grid">`;
-    for (let i = 0; i < 6; i++) {
-      const key = num + "_" + i;
-      const checked = !!state[key];
-      cells += `<div class="check-cell ${checked ? CHECK_CLASSES[i] : ''}" onclick="toggleCheck(${num},${i})" title="${["R1","R2","R3","Notes","PYQ","Test"][i]}">${checked ? CHECK_LABELS[i] : ''}</div>`;
-    }
-    cells += `</div></td>`;
-    // fill remaining empty tds for hidden cols
-    for (let j = 0; j < 4; j++) cells += `<td></td>`;
+    let cells = `<td class="session-num">${sessions.length - i}</td>`;
+    cells += `<td><input class="editable" type="date" value="${s.date}" oninput="sessions[${i}].date=this.value;saveState();updateStats()"/></td>`;
+    cells += `<td><select onchange="sessions[${i}].type=this.value;saveState();renderTable();updateStats()" style="background:transparent;border:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;">
+      <option value="running" ${s.type === 'running' ? 'selected' : ''}>🏃 Running</option>
+      <option value="walking" ${s.type === 'walking' ? 'selected' : ''}>🚶 Walking</option>
+      <option value="cycling" ${s.type === 'cycling' ? 'selected' : ''}>🚴 Cycling</option>
+    </select></td>`;
+    cells += `<td><input class="editable" type="number" min="1" value="${s.duration}" oninput="sessions[${i}].duration=parseInt(this.value);saveState();updateStats()" style="width:60px"/></td>`;
+    cells += `<td><input class="editable" type="number" min="0" value="${s.steps}" oninput="sessions[${i}].steps=parseInt(this.value);saveState();updateStats()" style="width:70px"/></td>`;
+    cells += `<td><input class="editable" type="number" min="0" step="0.1" value="${s.distance}" oninput="sessions[${i}].distance=parseFloat(this.value);saveState();updateStats()" style="width:70px"/></td>`;
+    cells += `<td><input class="editable" type="number" min="0" value="${s.calories}" oninput="sessions[${i}].calories=parseInt(this.value);saveState();updateStats()" style="width:70px"/></td>`;
+    cells += `<td><input class="editable" placeholder="Notes..." value="${s.notes}" oninput="sessions[${i}].notes=this.value;saveState()"/></td>`;
+    cells += `<td style="padding:11px 8px;"><button onclick="deleteSession(${i})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:12px;">✕</button></td>`;
     tr.innerHTML = cells;
     tbody.appendChild(tr);
   });
@@ -870,90 +660,93 @@ function setFilter(f, el) {
   renderTable();
 }
 
-function renderSchedule() {
-  const todayName = new Date().toLocaleDateString("en-IN",{weekday:"long"});
-  const grid = document.getElementById("schedule-grid");
+function renderWeekly() {
+  const today = new Date();
+  const sundayDate = new Date(today);
+  sundayDate.setDate(today.getDate() - today.getDay());
+
+  const grid = document.getElementById("weekly-grid");
   grid.innerHTML = "";
-  SCHEDULE.forEach(([day, task]) => {
-    const isToday = day.toLowerCase() === todayName.toLowerCase();
+
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(sundayDate);
+    d.setDate(sundayDate.getDate() + i);
+    const dateStr = d.toISOString().split('T')[0];
+    const daySessionsData = sessions.filter(s => s.date === dateStr);
+    const daySteps = daySessionsData.reduce((a, s) => a + parseInt(s.steps || 0), 0);
+
+    const isToday = d.toDateString() === today.toDateString();
+
     grid.innerHTML += `
       <div class="day-card ${isToday ? 'today' : ''}">
-        <div class="day-name">${isToday ? '▶ ' : ''}${day}</div>
-        <div class="day-task">${task}</div>
-        ${isToday ? '<div style="margin-top:8px;font-size:11px;color:var(--accent2);font-weight:600;">TODAY</div>' : ''}
+        <div class="day-label">${DAYS[i]}</div>
+        <div class="day-val">${daySteps.toLocaleString()}</div>
+        <div class="day-sub">steps</div>
       </div>`;
-  });
+  }
 }
 
-function renderPriority() {
-  const pc = document.getElementById("prelims-chips");
-  const mc = document.getElementById("mains-chips");
-  pc.innerHTML = PRELIMS.map(t => `<span class="topic-chip"><span class="dot dot-green"></span>${t}</span>`).join("");
-  mc.innerHTML = MAINS.map(t => `<span class="topic-chip"><span class="dot dot-accent"></span>${t}</span>`).join("");
-}
+function renderGoals() {
+  const goals = [
+    "Complete 5 sessions this week",
+    "Reach 50,000 steps",
+    "Burn 2,000 calories",
+    "Run 25 km total",
+    "Average 30+ min per session"
+  ];
 
-function renderWeakLog() {
-  const tbody = document.getElementById("weak-body");
-  tbody.innerHTML = "";
-  weakRows.forEach((row, i) => {
-    tbody.innerHTML += `<tr>
-      <td><input class="editable" placeholder="Topic..." value="${row.topic}" oninput="weakRows[${i}].topic=this.value;saveState()"/></td>
-      <td><input class="editable" placeholder="Problem..." value="${row.problem}" oninput="weakRows[${i}].problem=this.value;saveState()"/></td>
-      <td><input class="editable" placeholder="Action plan..." value="${row.action}" oninput="weakRows[${i}].action=this.value;saveState()"/></td>
-    </tr>`;
-  });
-}
-function addWeakRow() {
-  weakRows.push({topic:"",problem:"",action:""});
-  renderWeakLog();
-}
-
-function renderTestLog() {
-  const tbody = document.getElementById("test-body");
-  tbody.innerHTML = "";
-  testRows.forEach((row, i) => {
-    let scoreBadge = "";
-    const sc = parseInt(row.score);
-    if (!isNaN(sc) && row.score !== "") {
-      const cls = sc >= 70 ? "score-high" : sc >= 50 ? "score-mid" : "score-low";
-      scoreBadge = `<span class="score-badge ${cls}">${sc}%</span>`;
-    }
-    tbody.innerHTML += `<tr>
-      <td><input class="editable" placeholder="Test name..." value="${row.name}" oninput="testRows[${i}].name=this.value;saveState()"/></td>
-      <td><input class="editable" placeholder="e.g. 72" value="${row.score}" oninput="testRows[${i}].score=this.value;renderTestLog();saveState()" style="width:60px"/>
-        ${scoreBadge}</td>
-      <td><input class="editable" placeholder="Weak topic..." value="${row.weak}" oninput="testRows[${i}].weak=this.value;saveState()"/></td>
-      <td><input class="editable" placeholder="Improvement..." value="${row.improve}" oninput="testRows[${i}].improve=this.value;saveState()"/></td>
-    </tr>`;
-  });
-}
-function addTestRow() {
-  testRows.push({name:"",score:"",weak:"",improve:""});
-  renderTestLog();
-}
-
-function renderChecklist() {
-  const ul = document.getElementById("final-checklist");
+  const ul = document.getElementById("goals-checklist");
   ul.innerHTML = "";
-  CHECKLIST_ITEMS.forEach((item, i) => {
-    const done = !!checklistState[i];
-    ul.innerHTML += `<li class="${done ? 'done' : ''}" onclick="toggleChecklist(${i})">
+  goals.forEach((goal, i) => {
+    const done = !!goalState[i];
+    ul.innerHTML += `<li class="${done ? 'done' : ''}" onclick="toggleGoal(${i})">
       <span class="cl-check">${done ? '✓' : ''}</span>
-      ${item}
+      ${goal}
     </li>`;
   });
 }
-function toggleChecklist(i) {
-  checklistState[i] = !checklistState[i];
+
+function toggleGoal(i) {
+  goalState[i] = !goalState[i];
   saveState();
-  renderChecklist();
+  renderGoals();
+}
+
+function renderNotes() {
+  const tbody = document.getElementById("notes-body");
+  tbody.innerHTML = "";
+  notes.forEach((note, i) => {
+    tbody.innerHTML += `<tr>
+      <td style="padding:11px 16px;font-size:13px;border-bottom:1px solid var(--border);"><input class="editable" type="date" value="${note.date}" oninput="notes[${i}].date=this.value;saveState()"/></td>
+      <td style="padding:11px 16px;font-size:13px;border-bottom:1px solid var(--border);"><input class="editable" placeholder="Note..." value="${note.text}" oninput="notes[${i}].text=this.value;saveState()"/></td>
+      <td style="padding:11px 8px;"><button onclick="deleteNote(${i})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:12px;">✕</button></td>
+    </tr>`;
+  });
+}
+
+function addNote() {
+  notes.push({
+    date: new Date().toISOString().split('T')[0],
+    text: ""
+  });
+  saveState();
+  renderNotes();
+  showToast("Note added");
+}
+
+function deleteNote(idx) {
+  notes.splice(idx, 1);
+  saveState();
+  renderNotes();
 }
 
 function switchTab(id) {
   document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
   document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-  document.getElementById("tab-"+id).classList.add("active");
+  document.getElementById("tab-" + id).classList.add("active");
   event.currentTarget.classList.add("active");
+
+  if (id === "weekly") renderWeekly();
 }
 
 function showToast(msg) {
@@ -965,35 +758,31 @@ function showToast(msg) {
 
 function setDate() {
   const d = new Date();
-  const dateStr = d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
-  const dayStr = d.toLocaleDateString("en-IN",{weekday:"long"});
+  const dateStr = d.toLocaleDateString("en-IN", {day: "2-digit", month: "short", year: "numeric"});
+  const dayStr = d.toLocaleDateString("en-IN", {weekday: "long"});
   document.getElementById("today-date").textContent = dateStr;
   document.getElementById("today-day").textContent = dayStr;
 }
 
 function exportProgress() {
-  let csv = "Lec,Topic,Status,R1,R2,R3,Notes,PYQ,Test\n";
-  LECTURES.forEach(([n,t,s]) => {
-    const cols = [n,'"'+t+'"',s];
-    for (let i = 0; i < 6; i++) cols.push(state[n+"_"+i] ? "✓" : "");
-    csv += cols.join(",") + "\n";
+  let csv = "Date,Type,Duration,Steps,Distance,Calories,Notes\n";
+  sessions.forEach(s => {
+    csv += `${s.date},${s.type},${s.duration},${s.steps},${s.distance},${s.calories},"${s.notes}"\n`;
   });
-  const blob = new Blob([csv], {type:"text/csv"});
+  const blob = new Blob([csv], {type: "text/csv"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url; a.download = "polity_progress.csv"; a.click();
+  a.href = url;
+  a.download = "cardio_sessions.csv";
+  a.click();
   showToast("Exported!");
 }
 
-// INIT
 loadState();
 setDate();
 renderTable();
-renderSchedule();
-renderPriority();
-renderWeakLog();
-renderTestLog();
-renderChecklist();
+renderGoals();
+renderNotes();
 updateStats();
 </script>
 </body>
