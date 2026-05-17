@@ -405,6 +405,153 @@
   }
 
   .gap-section { height: 28px; }
+
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 9998;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+  }
+  .modal.show { display: flex; align-items: center; justify-content: center; }
+  .modal-content {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+  }
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: var(--text2);
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    color: var(--text);
+  }
+  .sync-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sync-tab {
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    color: var(--text2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-bottom: 2px solid transparent;
+  }
+  .sync-tab:hover { color: var(--text); }
+  .sync-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .sync-content { display: none; }
+  .sync-content.active { display: block; }
+  .form-group {
+    margin-bottom: 16px;
+  }
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus { border-color: var(--accent); }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+  .btn-primary {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .file-input-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+  }
+  .file-input-wrapper input[type=file] { display: none; }
+  .file-input-btn {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--surface2);
+    border: 2px dashed var(--border2);
+    border-radius: 8px;
+    color: var(--text2);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .file-input-btn:hover { border-color: var(--accent); color: var(--accent2); }
+  .sync-instructions {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.7;
+  }
+  .sync-instructions strong { color: var(--text); }
+  .sync-instructions ol { margin-left: 16px; }
+  .sync-instructions li { margin-bottom: 8px; }
+  .success-msg {
+    background: var(--green-dim);
+    border: 1px solid var(--green);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    color: var(--green);
+    font-size: 12px;
+  }
 </style>
 </head>
 <body>
@@ -462,6 +609,7 @@
     <button class="tab" onclick="switchTab('goals')">🎯 Goals</button>
     <button class="tab" onclick="switchTab('records')">🏆 Records</button>
     <button class="tab" onclick="switchTab('notes')">📝 Notes</button>
+    <button class="tab" onclick="openSyncModal()">⌚ Sync Watch</button>
   </div>
 
   <div class="tab-content active" id="tab-sessions">
@@ -540,16 +688,94 @@
 
 </div>
 
+<div class="modal" id="sync-modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeSyncModal()">✕</button>
+    <div class="modal-title">Sync with Watch</div>
+
+    <div class="sync-tabs">
+      <button class="sync-tab active" onclick="switchSyncTab('manual')">📝 Manual</button>
+      <button class="sync-tab" onclick="switchSyncTab('googlefit')">🔗 Google Fit</button>
+      <button class="sync-tab" onclick="switchSyncTab('csv')">📤 Import CSV</button>
+    </div>
+
+    <!-- MANUAL TAB -->
+    <div class="sync-content active" id="sync-manual">
+      <div class="sync-instructions">
+        <strong>Add steps manually</strong><br>
+        Enter the steps data from your Realme Watch for a specific date.
+      </div>
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="manual-date" />
+      </div>
+      <div class="form-group">
+        <label>Steps</label>
+        <input type="number" id="manual-steps" placeholder="e.g., 8500" min="0" />
+      </div>
+      <div class="form-group">
+        <label>Calories (optional)</label>
+        <input type="number" id="manual-calories" placeholder="e.g., 400" min="0" />
+      </div>
+      <div class="form-group">
+        <label>Distance in km (optional)</label>
+        <input type="number" id="manual-distance" step="0.1" placeholder="e.g., 6.5" min="0" />
+      </div>
+      <button class="btn-primary" onclick="addManualSteps()">Add Steps</button>
+    </div>
+
+    <!-- GOOGLE FIT TAB -->
+    <div class="sync-content" id="sync-googlefit">
+      <div class="sync-instructions">
+        <strong>Connect to Google Fit</strong><br>
+        Your Realme Watch syncs to Google Fit. Click below to authorize and import your steps data.
+      </div>
+      <div id="gfit-status"></div>
+      <button class="btn-primary" onclick="connectGoogleFit()">Connect Google Fit</button>
+      <div style="margin-top:16px;font-size:12px;color:var(--text3);">
+        <strong>Note:</strong> You'll be redirected to Google to authorize access. This app will fetch your daily steps data.
+      </div>
+    </div>
+
+    <!-- CSV TAB -->
+    <div class="sync-content" id="sync-csv">
+      <div class="sync-instructions">
+        <strong>Import from Realme Link</strong><br>
+        <ol>
+          <li>Open <strong>Realme Link</strong> app on your phone</li>
+          <li>Go to <strong>Health Data</strong> or <strong>Steps</strong> section</li>
+          <li>Look for export or backup option (usually in settings)</li>
+          <li>Export data as CSV file</li>
+          <li>Upload the CSV file here</li>
+        </ol>
+      </div>
+      <div class="file-input-wrapper">
+        <input type="file" id="csv-file" accept=".csv" onchange="handleCSVUpload()" />
+        <label for="csv-file" class="file-input-btn">
+          📁 Click to select CSV file or drag & drop
+        </label>
+      </div>
+      <div style="margin-top:16px;font-size:12px;color:var(--text3);">
+        <strong>Supported formats:</strong> Date, Steps, Calories, Distance columns
+      </div>
+      <div id="csv-preview" style="margin-top:16px;"></div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const WEEKLY_GOAL = 50000;
+const GOOGLE_FIT_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID"; // Will be set up for production
+const GOOGLE_FIT_REDIRECT_URI = window.location.origin;
 
 let sessions = [];
 let notes = [];
 let goalState = {};
 let currentFilter = "all";
+let googleFitAccessToken = null;
 
 function loadState() {
   try {
@@ -777,6 +1003,213 @@ function exportProgress() {
   a.click();
   showToast("Exported!");
 }
+
+// SYNC MODAL FUNCTIONS
+function openSyncModal() {
+  document.getElementById("sync-modal").classList.add("show");
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById("manual-date").value = today;
+}
+
+function closeSyncModal() {
+  document.getElementById("sync-modal").classList.remove("show");
+}
+
+function switchSyncTab(tabName) {
+  document.querySelectorAll(".sync-content").forEach(el => el.classList.remove("active"));
+  document.querySelectorAll(".sync-tab").forEach(el => el.classList.remove("active"));
+  document.getElementById("sync-" + tabName).classList.add("active");
+  event.currentTarget.classList.add("active");
+}
+
+function addManualSteps() {
+  const date = document.getElementById("manual-date").value;
+  const steps = parseInt(document.getElementById("manual-steps").value);
+  const calories = parseInt(document.getElementById("manual-calories").value) || 0;
+  const distance = parseFloat(document.getElementById("manual-distance").value) || 0;
+
+  if (!date || !steps) {
+    showToast("Please enter date and steps");
+    return;
+  }
+
+  const existingIdx = sessions.findIndex(s => s.date === date && s.type === "watch");
+  if (existingIdx >= 0) {
+    sessions[existingIdx] = {
+      date,
+      type: "watch",
+      duration: 0,
+      steps,
+      distance,
+      calories,
+      notes: "Synced from watch"
+    };
+  } else {
+    sessions.push({
+      date,
+      type: "watch",
+      duration: 0,
+      steps,
+      distance,
+      calories,
+      notes: "Synced from watch"
+    });
+  }
+
+  saveState();
+  renderTable();
+  updateStats();
+  showToast("Steps added successfully!");
+  document.getElementById("manual-steps").value = "";
+  document.getElementById("manual-calories").value = "";
+  document.getElementById("manual-distance").value = "";
+}
+
+function connectGoogleFit() {
+  const statusDiv = document.getElementById("gfit-status");
+  statusDiv.innerHTML = `<div class="success-msg">📱 Google Fit integration is in development.<br><br>Steps to enable:<br>1. Create a Google OAuth app at <strong>console.cloud.google.com</strong><br>2. Enable Google Fit API<br>3. Add your OAuth client ID to the tracker<br><br>For now, use the <strong>Import CSV</strong> tab to export steps from Realme Link.</div>`;
+}
+
+function handleCSVUpload() {
+  const file = document.getElementById("csv-file").files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const csv = e.target.result;
+      const lines = csv.split('\n');
+      const headers = lines[0].toLowerCase().split(',').map(h => h.trim());
+
+      // Find column indices
+      const dateIdx = headers.findIndex(h => h.includes('date') || h.includes('时间'));
+      const stepsIdx = headers.findIndex(h => h.includes('step') || h.includes('步数'));
+      const caloriesIdx = headers.findIndex(h => h.includes('calor') || h.includes('热量') || h.includes('能量'));
+      const distIdx = headers.findIndex(h => h.includes('dist') || h.includes('里程'));
+
+      if (dateIdx === -1 || stepsIdx === -1) {
+        showToast("CSV must have Date and Steps columns");
+        return;
+      }
+
+      let imported = 0;
+      const preview = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        if (!lines[i].trim()) continue;
+
+        const cols = lines[i].split(',').map(c => c.trim());
+        const dateStr = cols[dateIdx];
+        const stepsVal = parseInt(cols[stepsIdx]);
+        const caloriesVal = caloriesIdx >= 0 ? parseInt(cols[caloriesIdx]) : 0;
+        const distVal = distIdx >= 0 ? parseFloat(cols[distIdx]) : 0;
+
+        if (dateStr && stepsVal) {
+          const formattedDate = formatDateForCSV(dateStr);
+          if (formattedDate) {
+            const existingIdx = sessions.findIndex(s => s.date === formattedDate && s.type === "watch");
+            if (existingIdx >= 0) {
+              sessions[existingIdx] = {
+                date: formattedDate,
+                type: "watch",
+                duration: 0,
+                steps: stepsVal,
+                distance: distVal,
+                calories: caloriesVal,
+                notes: "Imported from Realme Link"
+              };
+            } else {
+              sessions.push({
+                date: formattedDate,
+                type: "watch",
+                duration: 0,
+                steps: stepsVal,
+                distance: distVal,
+                calories: caloriesVal,
+                notes: "Imported from Realme Link"
+              });
+            }
+            imported++;
+            if (preview.length < 5) {
+              preview.push(`${formattedDate}: ${stepsVal} steps${caloriesVal ? ', ' + caloriesVal + ' kcal' : ''}`);
+            }
+          }
+        }
+      }
+
+      saveState();
+      renderTable();
+      updateStats();
+
+      let previewHtml = `<div class="success-msg">✅ Imported ${imported} entries</div>`;
+      if (preview.length > 0) {
+        previewHtml += `<div style="font-size:12px;color:var(--text2);margin-top:12px;"><strong>Preview:</strong><br>${preview.join('<br>')}</div>`;
+      }
+      document.getElementById("csv-preview").innerHTML = previewHtml;
+      showToast(`Imported ${imported} records from CSV`);
+    } catch (err) {
+      showToast("Error parsing CSV: " + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function formatDateForCSV(dateStr) {
+  // Handle various date formats: YYYY-MM-DD, DD/MM/YYYY, MM/DD/YYYY, etc.
+  let date;
+
+  if (dateStr.includes('-')) {
+    // YYYY-MM-DD format
+    date = new Date(dateStr);
+  } else if (dateStr.includes('/')) {
+    const parts = dateStr.split('/');
+    if (parts[0].length === 4) {
+      // YYYY/MM/DD
+      date = new Date(parts[0], parseInt(parts[1]) - 1, parts[2]);
+    } else if (parts[2].length === 4) {
+      // DD/MM/YYYY or MM/DD/YYYY - try to detect
+      date = new Date(parts[2], parseInt(parts[1]) - 1, parts[0]);
+    } else {
+      // MM/DD/YY format
+      date = new Date(parts[2], parseInt(parts[0]) - 1, parts[1]);
+    }
+  } else if (dateStr.match(/\d{8}/)) {
+    // YYYYMMDD format
+    const year = dateStr.substr(0, 4);
+    const month = dateStr.substr(4, 2);
+    const day = dateStr.substr(6, 2);
+    date = new Date(year, parseInt(month) - 1, day);
+  } else {
+    return null;
+  }
+
+  if (isNaN(date.getTime())) return null;
+  return date.toISOString().split('T')[0];
+}
+
+// Drag and drop for CSV
+document.addEventListener('DOMContentLoaded', function() {
+  const fileInput = document.getElementById("csv-file");
+  if (fileInput) {
+    const label = fileInput.nextElementSibling;
+    label.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      label.style.borderColor = "var(--accent)";
+      label.style.color = "var(--accent2)";
+    });
+    label.addEventListener('dragleave', () => {
+      label.style.borderColor = "var(--border2)";
+      label.style.color = "var(--text2)";
+    });
+    label.addEventListener('drop', (e) => {
+      e.preventDefault();
+      label.style.borderColor = "var(--border2)";
+      label.style.color = "var(--text2)";
+      fileInput.files = e.dataTransfer.files;
+      handleCSVUpload();
+    });
+  }
+});
 
 loadState();
 setDate();
